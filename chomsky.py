@@ -139,6 +139,7 @@ def removeLongRules(dictionary):
 	for nonterminal, rules in dictionary.items():
 		number = len(dictionary)
 		for rule in rules:
+			number += 1
 			while len(rule) > 2:
 				key = "RLR%d" % (number)
 				number += 1
@@ -181,9 +182,7 @@ def ckyParse(string, dictionary):
 				for rule in listPosition:
 					table[i][j] += \
 						getFatherNonterminal(rule, dictionary)
-				print(listPosition)
 			table[i][j] = list(set(table[i][j]))
-			print("%d,%d" % (i, j))
 
 	for i in range(len(table)):
 		for j in range(len(table[i])):
