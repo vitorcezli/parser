@@ -136,10 +136,9 @@ def createDummyNonTerminal(dictionary):
 
 def removeLongRules(dictionary):
 	listAdd = []
+	number = len(dictionary)
 	for nonterminal, rules in dictionary.items():
-		number = len(dictionary)
 		for rule in rules:
-			number += 1
 			while len(rule) > 2:
 				key = "RLR%d" % (number)
 				number += 1
