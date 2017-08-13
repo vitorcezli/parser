@@ -181,10 +181,13 @@ def ckyParse(string, dictionary):
 				for rule in listPosition:
 					table[i][j] += \
 						getFatherNonterminal(rule, dictionary)
+				print(listPosition)
+			table[i][j] = list(set(table[i][j]))
+			print("%d,%d" % (i, j))
 
 	for i in range(len(table)):
 		for j in range(len(table[i])):
-			print(table[i][j], end = '\t')
+			print(table[i][j], end = "%5s" % ('\t'))
 		print('')
 
 
