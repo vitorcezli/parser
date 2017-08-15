@@ -18,7 +18,7 @@ def earleyParse(sentence, grammar):
 	for index in range(len(sentence)):
 		currentIndex = 0
 		while currentIndex < len(chart[index]):
-
+			print('nothing')
 
 
 chart = {}
@@ -28,4 +28,4 @@ addRuleOnChart(chart, 0, ['test'])
 addRuleOnChart(chart, 1, ['test'])
 print(chart)
 print(complete(['A', 'B', '.', 'C']))
-print(complete(['A', 'B', 'C', '.']))
+print(complete(['A', 'B', 'C', '.', 0, 0]))
