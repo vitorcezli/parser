@@ -51,6 +51,10 @@ def earleyParse(sentence, grammar):
 chart = {}
 grammar = [['A', 'B']]
 grammar.append(['B', 'C'])
+grammar.append(['C', 'E'])
 grammar.append(['B', 'D', 'E'])
-predict(['A', 'V', 'Y', '.', 'B', 3, 8], grammar, chart)
-print(chart)
+print(partOfSpeech(grammar, 'A'))
+print(partOfSpeech(grammar, 'B'))
+print(partOfSpeech(grammar, 'D'))
+print(partOfSpeech(grammar, 'E'))
+print(partOfSpeech(grammar, 'C'))
