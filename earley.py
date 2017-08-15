@@ -36,16 +36,14 @@ def predict(currentRule, grammar, chart):
 				rule[1 : ] + [positionOnWord, positionOnWord])
 
 
-def scanner(currentRule, grammar, chart):
+def scanner(currentRule, word, grammar, chart):
 	nonTerminalSymbol = currentRule[currentRule.index('.') + 1]
 	positionOnWord = currentRule[len(currentRule) - 1]
 
-	if partOfSpeech(grammar, nonTerminalSymbol):
-		for rule in grammar:
-			if rule[0] == nonTerminalSymbol:
-				addRuleOnChart(chart, positionOnWord + 1, \
-					[nonTerminalSymbol] + [rule[1]] + ['.'] + \
-					[positionOnWord, positionOnWord + 1])
+	if [nonTerminalSymbol, word] in grammar:
+		addRuleOnChart(chart, positionOnWord + 1, \
+			[nonTerminalSymbol] + [word] + ['.'] + \
+			[positionOnWord, positionOnWord + 1])
 
 
 def complete(currentRule, chart):
@@ -75,7 +73,8 @@ def earleyParse(sentence, grammar):
 			if isComplete(state):
 				complete(state, chart)
 			elif partOfSpeech(grammar, state[state.index('.') + 1]):
-				scanner(state, grammar, chart)
+				if index < len(sentence):
+					scanner(state, sentence[index], grammar, chart)
 			else:
 				predict(state, grammar, chart)
 			currentIndex += 1
@@ -96,4 +95,4 @@ grammar += [['Pronoun', 'I'], ['Pronoun', 'she'], ['Pronoun', 'me']]
 grammar += [['Proper-noun', 'Houston'], ['Proper-noun', 'TWA']]
 grammar += [['Aux', 'does']]
 grammar += [['Preposition', 'from'], ['Preposition', 'to'], ['Preposition', 'on'], ['Preposition', 'near'], ['Preposition', 'through']]
-print(earleyParse(['I', 'include'], grammar))
+print(earleyParse(['does', 'I', 'include', 'TWA', 'to', 'Houston'], grammar))
