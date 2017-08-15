@@ -19,6 +19,7 @@ def partOfSpeech(grammar, symbol):
 
 
 def predict(currentRule, grammar, chart):
+	print('nothing')
 
 
 
