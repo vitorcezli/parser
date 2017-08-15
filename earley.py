@@ -25,7 +25,7 @@ def predict(currentRule, grammar, chart):
 	for rule in grammar:
 		if rule[0] == nonTerminalSymbol:
 			addRuleOnChart(chart, positionOnWord, [rule[0]] + ['.'] +
-				rule[1 : len(rule) - 2] + [positionOnWord, positionOnWord])
+				rule[1 : ] + [positionOnWord, positionOnWord])
 
 
 
