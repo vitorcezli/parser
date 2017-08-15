@@ -7,7 +7,7 @@ def addRuleOnChart(chart, position, rule):
 		chart[position].append(rule)
 
 
-def complete(rule):
+def isComplete(rule):
 	return rule.index('.') == len(rule) - 3
 
 
@@ -68,11 +68,19 @@ def earleyParse(sentence, grammar):
 	chart = {}
 	addRuleOnChart(chart, 0, ['start', '.', 'S', 0, 0])
 
-	for index in range(len(sentence)):
+	for index in range(len(sentence) + 1):
 		currentIndex = 0
 		while currentIndex < len(chart[index]):
-			print('nothing')
+			state = chart[index][currentIndex]
+			if isComplete(state):
+				complete(state, chart)
+			elif partOfSpeech(state[state.index('.') + 1]):
+				scanner(state, grammar, chart)
+			else:
+				predict(state, grammar, chart)
 			currentIndex += 1
+
+	return chart
 
 
 chart = {}
