@@ -48,9 +48,9 @@ def scanner(currentRule, grammar, chart):
 					[positionOnWord, positionOnWord + 1])
 
 
-def complete(currentRule, grammar, chart):
+def complete(currentRule, chart):
 	listAddToChart = []
-	for state in chart:
+	for state in chart[currentRule[len(currentRule) - 2]]:
 		indexOfPoint = currentRule[currentRule.index('.') + 1]
 		if state[indexOfPoint + 1] == currentRule[0]:
 			newState = state[:]
@@ -75,12 +75,7 @@ def earleyParse(sentence, grammar):
 
 
 chart = {}
-grammar = [['A', 'B']]
-grammar.append(['B', 'C'])
-grammar.append(['C', 'E'])
-grammar.append(['C', 'F'])
-grammar.append(['B', 'D', 'E'])
-scanner(['B', '.', 'C', 0, 2], grammar, chart)
-print(chart)
-scanner(['G', '.', 'C', 'D', 'B', 3, 3], grammar, chart)
+addRuleOnChart(chart, 0, ['A', '.', 'B', 0, 0])
+addRuleOnChart(chart, 0, ['E', '.', 'B', 'F', 'G', 0, 0])
+complete(['B', 'C', '.', 0, 7], chart)
 print(chart)
