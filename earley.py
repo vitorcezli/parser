@@ -96,4 +96,4 @@ grammar += [['Pronoun', 'I'], ['Pronoun', 'she'], ['Pronoun', 'me']]
 grammar += [['Proper-noun', 'Houston'], ['Proper-noun', 'TWA']]
 grammar += [['Aux', 'does']]
 grammar += [['Preposition', 'from'], ['Preposition', 'to'], ['Preposition', 'on'], ['Preposition', 'near'], ['Preposition', 'through']]
-print(earleyParse(['does', 'I', 'include', 'TWA', 'to', 'Houston'], grammar))
+print(earleyParse(['I', 'include'], grammar))
