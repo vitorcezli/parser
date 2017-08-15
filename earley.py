@@ -11,11 +11,19 @@ def complete(rule):
 	return rule.index('.') == len(rule) - 3
 
 
-def partOfSpeech(grammar, symbol):
+def terminal(grammar, symbol):
 	for rule in grammar:
 		if rule[0] == symbol:
 			return False
 	return True
+
+
+def partOfSpeech(grammar, symbol):
+	for rule in grammar:
+		if rule[0] == symbol and len(rule) == 2 and \
+			terminal(grammar, rule[1]):
+			return True
+	return False
 
 
 def predict(currentRule, grammar, chart):
