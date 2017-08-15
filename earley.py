@@ -36,6 +36,17 @@ def predict(currentRule, grammar, chart):
 				rule[1 : ] + [positionOnWord, positionOnWord])
 
 
+def scanner(currentRule, grammar, chart):
+	nonTerminalSymbol = currentRule[currentRule.index('.') + 1]
+	positionOnWord = currentRule[len(currentRule) - 1]
+
+	if partOfSpeech(grammar, nonTerminalSymbol):
+		for rule in grammar:
+			if rule[0] == nonTerminalSymbol:
+				addRuleOnChart(chart, positionOnWord + 1, \
+					[nonTerminalSymbol] + [rule[1]] + ['.'] + \
+					[positionOnWord, positionOnWord + 1])
+
 
 def earleyParse(sentence, grammar):
 	chart = {}
