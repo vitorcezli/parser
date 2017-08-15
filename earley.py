@@ -46,7 +46,7 @@ def scanner(currentRule, word, grammar, chart):
 			[positionOnWord, positionOnWord + 1])
 
 
-def complete(currentRule, chart):
+def complete(currentRule, chart, tree):
 	listAddToChart = []
 
 	for state in chart[currentRule[len(currentRule) - 2]]:
@@ -57,6 +57,7 @@ def complete(currentRule, chart):
 			newState[indexOfPoint + 1] = '.'
 			newState[len(newState) - 1] = currentRule[len(currentRule) - 1]
 			listAddToChart.append(newState)
+			tree.append([newState, state, currentRule])
 
 	for state in listAddToChart:
 		addRuleOnChart(chart, currentRule[len(currentRule) - 1], state)
@@ -64,6 +65,7 @@ def complete(currentRule, chart):
 
 def earleyParse(sentence, grammar):
 	chart = {}
+	tree = []
 	addRuleOnChart(chart, 0, ['start', '.', 'S', 0, 0])
 
 	for index in range(len(sentence) + 1):
@@ -71,7 +73,7 @@ def earleyParse(sentence, grammar):
 		while currentIndex < len(chart[index]):
 			state = chart[index][currentIndex]
 			if isComplete(state):
-				complete(state, chart)
+				complete(state, chart, tree)
 			elif partOfSpeech(grammar, state[state.index('.') + 1]):
 				if index < len(sentence):
 					scanner(state, sentence[index], grammar, chart)
