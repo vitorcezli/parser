@@ -19,7 +19,13 @@ def partOfSpeech(grammar, symbol):
 
 
 def predict(currentRule, grammar, chart):
-	print('nothing')
+	nonTerminalSymbol = currentRule[currentRule.index('.') + 1]
+	positionOnWord = currentRule[len(currentRule) - 1]
+
+	for rule in grammar:
+		if rule[0] == nonTerminalSymbol:
+			addRuleOnChart(chart, positionOnWord, [rule[0]] + ['.'] +
+				rule[1 : len(rule) - 2] + [positionOnWord, positionOnWord])
 
 
 
@@ -35,14 +41,8 @@ def earleyParse(sentence, grammar):
 
 
 chart = {}
-addRuleOnChart(chart, 0, ['test'])
-addRuleOnChart(chart, 0, ['test1'])
-addRuleOnChart(chart, 0, ['test'])
-addRuleOnChart(chart, 1, ['test'])
-print(chart)
-print(complete(['A', 'B', '.', 'C']))
-print(complete(['A', 'B', 'C', '.', 0, 0]))
 grammar = [['A', 'B']]
 grammar.append(['B', 'C'])
-print(partOfSpeech(grammar, 'A'))
-print(partOfSpeech(grammar, 'C'))
+grammar.append(['B', 'D', 'E'])
+predict(['A', 'V', 'Y', '.', 'B', 3, 8], grammar, chart)
+print(chart)
