@@ -87,11 +87,9 @@ def printRule(tree, rule):
 	for rules in tree:
 		if rules[0] == rule:
 			if isComplete(rules[0]):
-				print("[" + ("%s" % (rules[0][0 : len(rules[0]) - 3])) + \
-					"]", end = ' ')
+				print("%s" % (rules[0][0 : len(rules[0]) - 3]))
 			printRule(tree, rules[1])
 			printRule(tree, rules[2])
-			print("]", end = '')
 
 def printParseTree(tree, sentence):
 	printRule(tree, ['start', 'S', '.', 0, len(sentence)])
