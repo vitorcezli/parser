@@ -84,12 +84,21 @@ def earleyParse(sentence, grammar):
 
 
 def printRule(tree, rule):
+	printed = False
+
 	for rules in tree:
 		if rules[0] == rule:
+			if printed:
+				print("\nor\n")
 			if isComplete(rules[0]):
-				print("%s" % (rules[0][0 : len(rules[0]) - 3]))
+				print(rules[0][0], end = ' -> ')
+				for word in rules[0][1 : len(rules[0]) - 3]:
+					print(word, end = ' ')
+				print('')
 			printRule(tree, rules[1])
 			printRule(tree, rules[2])
+			printed = True
+
 
 def printParseTree(tree, sentence):
 	printRule(tree, ['start', 'S', '.', 0, len(sentence)])
@@ -110,6 +119,6 @@ grammar += [['Pronoun', 'I'], ['Pronoun', 'she'], ['Pronoun', 'me']]
 grammar += [['Proper-noun', 'Houston'], ['Proper-noun', 'TWA']]
 grammar += [['Aux', 'does']]
 grammar += [['Preposition', 'from'], ['Preposition', 'to'], ['Preposition', 'on'], ['Preposition', 'near'], ['Preposition', 'through']]
-sentence = ['does', 'I', 'include', 'TWA', 'to', 'Houston']
+sentence = ['I', 'include', 'TWA']
 parseTree = earleyParse(sentence, grammar)
 printParseTree(parseTree, sentence)
