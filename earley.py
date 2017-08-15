@@ -48,6 +48,21 @@ def scanner(currentRule, grammar, chart):
 					[positionOnWord, positionOnWord + 1])
 
 
+def complete(currentRule, grammar, chart):
+	listAddToChart = []
+	for state in chart:
+		indexOfPoint = currentRule[currentRule.index('.') + 1]
+		if state[indexOfPoint + 1] == currentRule[0]:
+			newState = state[:]
+			newState[indexOfPoint] = newState[indexOfPoint + 1]
+			newState[indexOfPoint + 1] = '.'
+			newState[len(newState - 1)] = currentRule[len(currentRule) - 1]
+			listAddToChart.append(newState)
+
+	for state in listAddToChart:
+		addRuleOnChart(chart, currentRule[len(currentRule) - 1], state)
+
+
 def earleyParse(sentence, grammar):
 	chart = {}
 	addRuleOnChart(chart, 0, ['start', '.', 'S', 0, 0])
