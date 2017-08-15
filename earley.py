@@ -74,7 +74,7 @@ def earleyParse(sentence, grammar):
 			state = chart[index][currentIndex]
 			if isComplete(state):
 				complete(state, chart)
-			elif partOfSpeech(state[state.index('.') + 1]):
+			elif partOfSpeech(grammar, state[state.index('.') + 1]):
 				scanner(state, grammar, chart)
 			else:
 				predict(state, grammar, chart)
@@ -83,8 +83,17 @@ def earleyParse(sentence, grammar):
 	return chart
 
 
-chart = {}
-addRuleOnChart(chart, 0, ['A', '.', 'B', 0, 0])
-addRuleOnChart(chart, 0, ['E', '.', 'B', 'F', 'G', 0, 0])
-complete(['B', 'C', 'D', '.', 0, 7], chart)
-print(chart)
+grammar = []
+grammar += [['S', 'NP', 'VP'], ['S', 'Aux', 'NP', 'VP'], ['S', 'VP']]
+grammar += [['NP', 'Pronoun'], ['NP', 'Proper-noun'], ['NP', 'Det', 'Nominal']]
+grammar += [['Nominal', 'Noun'], ['Nominal', 'Nominal', 'Noun'], ['Nominal', 'Nominal', 'PP']]
+grammar += [['VP', 'Verb'], ['VP', 'Verb', 'NP'], ['VP', 'Verb', 'NP', 'PP'], ['VP', 'Verb', 'PP'], ['VP', 'VP', 'PP']]
+grammar += [['PP', 'Preposition', 'NP']]
+grammar += [['Det', 'that'], ['Det', 'this'], ['Det', 'a']]
+grammar += [['Noun', 'book'], ['Noun', 'flight'], ['Noun', 'meal'], ['Noun', 'money']]
+grammar += [['Verb', 'book'], ['Verb', 'include'], ['Verb', 'prefer']]
+grammar += [['Pronoun', 'I'], ['Pronoun', 'she'], ['Pronoun', 'me']]
+grammar += [['Proper-noun', 'Houston'], ['Proper-noun', 'TWA']]
+grammar += [['Aux', 'does']]
+grammar += [['Preposition', 'from'], ['Preposition', 'to'], ['Preposition', 'on'], ['Preposition', 'near'], ['Preposition', 'through']]
+print(earleyParse(['does', 'I', 'include', 'TWA', 'to', 'Houston'], grammar))
