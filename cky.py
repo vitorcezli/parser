@@ -44,7 +44,7 @@ def deleteEmptyRules(rulesDictionary):
 def deleteEmptyNonTerminals(rulesDictionary):
 	deleteList = []
 	for nonterminal, rule in rulesDictionary.items():
-		if len(rule) == 0:
+		if len(rule) == 1 and ifEmptyRule(rule[0]):
 			deleteList.append(nonterminal)
 	for nonterminal in deleteList:
 		del rulesDictionary[nonterminal]
