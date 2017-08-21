@@ -69,7 +69,6 @@ def removeNonterminalFromRules(listOfRules, nonterminal):
 
 
 def removeDuplicates(listVariable):
-	listVariable.sort()
 	return list(k for k,_ in itertools.groupby(listVariable))	
 
 
@@ -90,10 +89,22 @@ def getAllPossibilitiesRemoving(listOfRules, nonterminal):
 	possibilities = []
 
 	for rule in listOfRules:
-		possibilities.append(rule)
-		possibilitiesWithout = getPossibilitiesWithout(rule, nonterminal)
+		print(rule)
+		sumProbability = rule[len(rule) - 1]
+		newPossibilities = []
+		newPossibilities.append(rule[ : len(rule) - 1])
+		possibilitiesWithout = \
+			getPossibilitiesWithout(rule[ : len(rule) - 1], nonterminal)
 		if possibilitiesWithout != []:
-			possibilities += possibilitiesWithout
+			newPossibilities += possibilitiesWithout
+		newPossibilities = removeDuplicates(newPossibilities)
+
+		# normalize the probability
+		for possibility in newPossibilities:
+			possibility.append(sumProbability / len(newPossibilities))
+		possibilities += newPossibilities
+		print(possibilities)
+
 	return removeDuplicates(possibilities)
 
 
