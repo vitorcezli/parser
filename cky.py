@@ -1,6 +1,11 @@
 #!/usr/bin/python
 import itertools
+import numbers
 import copy
+
+
+def ifEmptyRule(rule):
+	if len(rule == 1) and isinstance(rule[0], numbers.Number)
 
 
 def hasEmptyTransition(rulesDictionary, nonterminal):
@@ -190,18 +195,18 @@ def ckyParse(string, dictionary):
 
 
 
-dictRules = {}
-dictRules['S'] = [['NP', 'VP'], ['Aux', 'NP', 'VP'], ['VP']]
-dictRules['NP'] = [['Pronoun'], ['Proper-noun'], ['Det', 'Nominal']]
-dictRules['Nominal'] = [['Noun'], ['Nominal', 'Noun'], ['Nominal', 'PP']]
-dictRules['VP'] = [['Verb'], ['Verb', 'NP'], ['Verb', 'NP', 'PP'], ['Verb', 'PP'], ['VP', 'PP']]
-dictRules['PP'] = [['Preposition', 'NP']]
-dictRules['Det'] = [['that'], ['this'], ['a']]
-dictRules['Noun'] = [['book'], ['flight'], ['meal'], ['money']]
-dictRules['Verb'] = [['book'], ['include'], ['prefer']]
-dictRules['Pronoun'] = [['I'], ['she'], ['me']]
-dictRules['Proper-noun'] = [['Houston'], ['TWA']]
-dictRules['Aux'] = [['does']]
-dictRules['Preposition'] = [['from'], ['to'], ['on'], ['near'], ['through']]
-convertToChomsky(dictRules)
-ckyParse(['does', 'I', 'include', 'TWA', 'to', 'Houston'], dictRules)
+# dictRules = {}
+# dictRules['S'] = [['NP', 'VP'], ['Aux', 'NP', 'VP'], ['VP']]
+# dictRules['NP'] = [['Pronoun'], ['Proper-noun'], ['Det', 'Nominal']]
+# dictRules['Nominal'] = [['Noun'], ['Nominal', 'Noun'], ['Nominal', 'PP']]
+# dictRules['VP'] = [['Verb'], ['Verb', 'NP'], ['Verb', 'NP', 'PP'], ['Verb', 'PP'], ['VP', 'PP']]
+# dictRules['PP'] = [['Preposition', 'NP']]
+# dictRules['Det'] = [['that'], ['this'], ['a']]
+# dictRules['Noun'] = [['book'], ['flight'], ['meal'], ['money']]
+# dictRules['Verb'] = [['book'], ['include'], ['prefer']]
+# dictRules['Pronoun'] = [['I'], ['she'], ['me']]
+# dictRules['Proper-noun'] = [['Houston'], ['TWA']]
+# dictRules['Aux'] = [['does']]
+# dictRules['Preposition'] = [['from'], ['to'], ['on'], ['near'], ['through']]
+# convertToChomsky(dictRules)
+# ckyParse(['does', 'I', 'include', 'TWA', 'to', 'Houston'], dictRules)
