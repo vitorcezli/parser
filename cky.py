@@ -1,11 +1,12 @@
 #!/usr/bin/python
+from __future__ import division
 import itertools
 import numbers
 import copy
 
 
 def ifEmptyRule(rule):
-	if len(rule == 1) and isinstance(rule[0], numbers.Number)
+	return len(rule) == 1 and isinstance(rule[0], numbers.Number)
 
 
 def hasEmptyTransition(rulesDictionary, nonterminal):
@@ -18,9 +19,23 @@ def hasOnlyEmptyTransition(rulesDictionary, nonterminal):
 
 
 def deleteEmptyRules(rulesDictionary):
-	for nonterminal, rule in rulesDictionary.items():
-		if [] in rule:
-			del rule[rule.index([])]
+	deletionIndex = -1
+
+	for nonterminal, rules in rulesDictionary.items():
+		for index in range(len(rules)):
+			if ifEmptyRule(rules[index]):
+				deletionIndex = index
+				nonEmptyProbability = 1 - rules[index][0]
+				for index1 in range(len(rules)):
+					if index1 != index:
+						length = len(rules[index1])
+						rules[index1][length - 1] = rules[index1][length - 1] \
+							/ nonEmptyProbability
+				break
+
+	if deletionIndex != -1:
+		del rules[deletionIndex]
+
 
 
 def deleteEmptyNonTerminals(rulesDictionary):
