@@ -10,12 +10,15 @@ def ifEmptyRule(rule):
 
 
 def hasEmptyTransition(rulesDictionary, nonterminal):
-	return [] in rulesDictionary[nonterminal]
+	for rule in rulesDictionary[nonterminal]:
+		if ifEmptyRule(rule):
+			return True
+	return False
 
 
 def hasOnlyEmptyTransition(rulesDictionary, nonterminal):
 	return len(rulesDictionary[nonterminal]) == 1 and \
-		[] in rulesDictionary[nonterminal]
+		ifEmptyRule(rulesDictionary[nonterminal][0])
 
 
 def deleteEmptyRules(rulesDictionary):
