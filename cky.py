@@ -55,8 +55,16 @@ def removeNonterminalFromRules(listOfRules, nonterminal):
 
 	for rule in listOfRules:
 		rule = list(filter(lambda a: a != nonterminal, rule))
-		if rule != []:
+		if not ifEmptyRule(rule):
 			listValueRemoved.append(rule)
+
+	# probability normalization
+	sumProb = 0
+	for rule in listValueRemoved:
+		sumProb += rule[len(rule) - 1]
+	for rule in listValueRemoved:
+		rule[len(rule) - 1 ] = rule[len(rule) - 1 ] / sumProb
+
 	return listValueRemoved
 
 
