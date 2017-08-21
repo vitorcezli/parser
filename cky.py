@@ -86,11 +86,28 @@ def getPossibilitiesWithout(rule, nonterminal):
 	return removeDuplicates(possibilities)
 
 
+def joinSamePossibilities(listOfRules):
+	dictJoin = {}
+	for rule in listOfRules:
+		if tuple(rule[ : len(rule) - 1]) in dictJoin:
+			dictJoin[tuple(rule[ : len(rule) - 1])] += \
+				rule[len(rule) - 1]
+		else:
+			dictJoin[tuple(rule[ : len(rule) - 1])] = \
+				rule[len(rule) - 1]
+
+	returnRules = []
+	for rule, probability in dictJoin.items():
+		transition = list(rule)
+		transition.append(probability)
+		returnRules.append([transition])
+	return returnRules
+
+
 def getAllPossibilitiesRemoving(listOfRules, nonterminal):
 	possibilities = []
 
 	for rule in listOfRules:
-		print(rule)
 		sumProbability = rule[len(rule) - 1]
 		newPossibilities = []
 		newPossibilities.append(rule[ : len(rule) - 1])
@@ -104,12 +121,9 @@ def getAllPossibilitiesRemoving(listOfRules, nonterminal):
 		for possibility in newPossibilities:
 			possibility.append(sumProbability / len(newPossibilities))
 		possibilities += newPossibilities
-		print(possibilities)
 
 	# join same possibilities
-	
-
-	return removeDuplicates(possibilities)
+	return joinSamePossibilities(possibilities)
 
 
 def removeEmptyTransitions(dictionary):
