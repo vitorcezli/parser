@@ -132,7 +132,7 @@ def removeEmptyTransitions(dictionary):
 			for nonterminal1, rules in dictionary.items():
 				dictionary[nonterminal1] = \
 					removeNonterminalFromRules(rules, nonterminal)
-		if hasEmptyTransition(dictionary, nonterminal):
+		elif hasEmptyTransition(dictionary, nonterminal):
 			for nonterminal1, rules in dictionary.items():
 				dictionary[nonterminal1] = \
 					getAllPossibilitiesRemoving(rules, nonterminal)
