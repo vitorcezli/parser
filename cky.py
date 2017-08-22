@@ -5,69 +5,6 @@ import numbers
 import copy
 
 
-def ifEmptyRule(rule):
-	return len(rule) == 1 and isinstance(rule[0], numbers.Number)
-
-
-def hasEmptyTransition(rulesDictionary, nonterminal):
-	for rule in rulesDictionary[nonterminal]:
-		if ifEmptyRule(rule):
-			return True
-	return False
-
-
-def hasOnlyEmptyTransition(rulesDictionary, nonterminal):
-	return len(rulesDictionary[nonterminal]) == 1 and \
-		ifEmptyRule(rulesDictionary[nonterminal][0])
-
-
-def deleteEmptyRules(rulesDictionary):
-	deletionIndex = -1
-
-	for nonterminal, rules in rulesDictionary.items():
-		for index in range(len(rules)):
-			if ifEmptyRule(rules[index]):
-				deletionIndex = index
-				nonEmptyProbability = 1 - rules[index][0]
-				for index1 in range(len(rules)):
-					if index1 != index:
-						length = len(rules[index1])
-						rules[index1][length - 1] = rules[index1][length - 1] \
-							/ nonEmptyProbability
-				break
-
-	if deletionIndex != -1:
-		del rules[deletionIndex]
-
-
-
-def deleteEmptyNonTerminals(rulesDictionary):
-	deleteList = []
-	for nonterminal, rule in rulesDictionary.items():
-		if len(rule) == 1 and ifEmptyRule(rule[0]):
-			deleteList.append(nonterminal)
-	for nonterminal in deleteList:
-		del rulesDictionary[nonterminal]
-
-
-def removeNonterminalFromRules(listOfRules, nonterminal):
-	listValueRemoved = []
-
-	for rule in listOfRules:
-		rule = list(filter(lambda a: a != nonterminal, rule))
-		if not ifEmptyRule(rule):
-			listValueRemoved.append(rule)
-
-	# probability normalization
-	sumProb = 0
-	for rule in listValueRemoved:
-		sumProb += rule[len(rule) - 1]
-	for rule in listValueRemoved:
-		rule[len(rule) - 1 ] = rule[len(rule) - 1 ] / sumProb
-
-	return listValueRemoved
-
-
 def removeDuplicates(listVariable):
 	listVariable.sort()
 	return list(k for k,_ in itertools.groupby(listVariable))	
@@ -127,17 +64,7 @@ def getAllPossibilitiesRemoving(listOfRules, nonterminal):
 
 
 def removeEmptyTransitions(dictionary):
-	for nonterminal, _ in dictionary.items():
-		if hasOnlyEmptyTransition(dictionary, nonterminal):
-			for nonterminal1, rules in dictionary.items():
-				dictionary[nonterminal1] = \
-					removeNonterminalFromRules(rules, nonterminal)
-		elif hasEmptyTransition(dictionary, nonterminal):
-			for nonterminal1, rules in dictionary.items():
-				dictionary[nonterminal1] = \
-					getAllPossibilitiesRemoving(rules, nonterminal)
-	deleteEmptyRules(dictionary)
-	deleteEmptyNonTerminals(dictionary)
+	
 
 
 def getUnitarySons(dictionary, nonterminal):
