@@ -63,9 +63,19 @@ def getAllPossibilitiesRemoving(listOfRules, nonterminal):
 	return joinSamePossibilities(possibilities)
 
 
-def removeEmptyTransitions(dictionary):
-	
+def normalize(rules):
+	sumProbability = 0
+	for rule in rules:
+		sumProbability += rule[len(rule) - 1]
+	for rule in rules:
+		rule[len(rule) - 1] /= sumProbability
 
+
+def removeEmptyTransitions(dictionary):
+	while(True):
+		for nonterminal, rules in dictionary.items():
+			if len(rules) == 1:
+				print("I will complete this part")
 
 def getUnitarySons(dictionary, nonterminal):
 	if nonterminal not in dictionary:
@@ -192,3 +202,8 @@ def ckyParse(string, dictionary):
 # dictRules['Preposition'] = [['from'], ['to'], ['on'], ['near'], ['through']]
 # convertToChomsky(dictRules)
 # ckyParse(['does', 'I', 'include', 'TWA', 'to', 'Houston'], dictRules)
+dictRules = {}
+dictRules['A'] = [['B', 0.1], ['C', 0.1]]
+print(dictRules)
+normalize(dictRules['A'])
+print(dictRules)
