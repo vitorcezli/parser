@@ -71,11 +71,35 @@ def normalize(rules):
 		rule[len(rule) - 1] /= sumProbability
 
 
+def emptyRule(rule):
+	return len(rule) == 1 and isinstance(rule[0], numbers.Number)
+
+
+def removeFromRules(rules, nonterminal):
+	newRules = rules[:]
+	for rule in rules:
+		newRules.append(list(filter(lambda a: a != nonterminal, rule)))
+	return newRules
+
+
 def removeEmptyTransitions(dictionary):
 	while(True):
 		for nonterminal, rules in dictionary.items():
-			if len(rules) == 1:
+			# if the nonterminal only generates an empty string
+			if len(rules) == 1 and emptyRule(rules[0]):
+				# remove the nonterminal from every rule it appears
+				# remove the nonterminal from the dictionary
 				print("I will complete this part")
+				break
+			else:
+				# if the nonterminal generates an empty string in one of its rules
+					# remove the empty generation rule
+					# normalize its rules
+					# use getPossibilitiesRemoving in every rule it appears
+					print("I will complete this part")
+
+
+
 
 def getUnitarySons(dictionary, nonterminal):
 	if nonterminal not in dictionary:
@@ -207,3 +231,9 @@ dictRules['A'] = [['B', 0.1], ['C', 0.1]]
 print(dictRules)
 normalize(dictRules['A'])
 print(dictRules)
+print(emptyRule([0]))
+print(emptyRule([0, 0]))
+print(emptyRule(['A']))
+print(emptyRule([0.1]))
+rules = [['A', 'B', 'A', 'C', 0.5], ['A', 0.5]]
+print(removeFromRules(rules, 'A'))
