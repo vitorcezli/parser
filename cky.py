@@ -107,9 +107,14 @@ def removeEmptyTransitions(dictionary):
 				# if the nonterminal generates an empty string in one of its rules
 				if generates:
 					# remove the empty generation rule
-					# normalize its rules
+					rules = removeEmptyRules(rules)
+					normalize(rules)
 					# use getPossibilitiesRemoving in every rule it appears
-					print("I will complete this part")
+					for nonterminal1, rules1 in dictionary.items():
+						if nonterminal1 != nonterminal:
+							rules1 = getAllPossibilitiesRemoving(rules1, nonterminal)
+							rules1 = removeEmptyRules(rules1)
+							normalize(rules1)
 		# if the program has passed every nonterminal it has not found any
 		# empty transition
 		break
@@ -243,16 +248,9 @@ def ckyParse(string, dictionary):
 # convertToChomsky(dictRules)
 # ckyParse(['does', 'I', 'include', 'TWA', 'to', 'Houston'], dictRules)
 dictRules = {}
-dictRules['A'] = [['B', 0.1], ['C', 0.1]]
+dictRules['B'] = [[1]]
+dictRules['A'] = [['B', 0.5], ['C', 0.5]]
+dictRules['C'] = [['B', 1]]
 print(dictRules)
-normalize(dictRules['A'])
+removeEmptyRules(dictRules)
 print(dictRules)
-print(emptyRule([0]))
-print(emptyRule([0, 0]))
-print(emptyRule(['A']))
-print(emptyRule([0.1]))
-rules = [['A', 'B', 'A', 'C', 0.5], ['A', 0.3], ['A', 0.2]]
-rules = removeFromRules(rules, 'A')
-print(rules)
-rules = removeEmptyRules(rules)
-print(rules)
