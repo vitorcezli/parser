@@ -76,10 +76,14 @@ def emptyRule(rule):
 
 
 def removeFromRules(rules, nonterminal):
-	newRules = rules[:]
+	newRules = []
 	for rule in rules:
 		newRules.append(list(filter(lambda a: a != nonterminal, rule)))
 	return newRules
+
+
+def removeEmptyRules(rules):
+	return list(filter(lambda a: len(a) != 1, rules))
 
 
 def removeEmptyTransitions(dictionary):
@@ -88,15 +92,27 @@ def removeEmptyTransitions(dictionary):
 			# if the nonterminal only generates an empty string
 			if len(rules) == 1 and emptyRule(rules[0]):
 				# remove the nonterminal from every rule it appears
+				for _, rules1 in dictionary.items():
+					rules1 = removeFromRules(rules1, nonterminal)
+					rules1 = removeEmptyRules(rules1)
+					normalize(rules1)
 				# remove the nonterminal from the dictionary
-				print("I will complete this part")
+				del dictionary[nonterminal]
 				break
 			else:
+				generates = False
+				for rule in rules:
+					if emptyRule(rule):
+						generates = True
 				# if the nonterminal generates an empty string in one of its rules
+				if generates:
 					# remove the empty generation rule
 					# normalize its rules
 					# use getPossibilitiesRemoving in every rule it appears
 					print("I will complete this part")
+		# if the program has passed every nonterminal it has not found any
+		# empty transition
+		break
 
 
 
@@ -235,5 +251,8 @@ print(emptyRule([0]))
 print(emptyRule([0, 0]))
 print(emptyRule(['A']))
 print(emptyRule([0.1]))
-rules = [['A', 'B', 'A', 'C', 0.5], ['A', 0.5]]
-print(removeFromRules(rules, 'A'))
+rules = [['A', 'B', 'A', 'C', 0.5], ['A', 0.3], ['A', 0.2]]
+rules = removeFromRules(rules, 'A')
+print(rules)
+rules = removeEmptyRules(rules)
+print(rules)
