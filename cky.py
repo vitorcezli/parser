@@ -90,12 +90,15 @@ def removeEmptyTransitions(dictionary):
 	while(True):
 		for nonterminal, rules in dictionary.items():
 			# if the nonterminal only generates an empty string
-			if len(rules) == 1 and emptyRule(rules[0]):
+			if len(rules) == 0 or (len(rules) == 1 and emptyRule(rules[0])):
 				# remove the nonterminal from every rule it appears
-				for _, rules1 in dictionary.items():
+				for nonterminal1, rules1 in dictionary.items():
+					print('\t' + nonterminal1)
 					rules1 = removeFromRules(rules1, nonterminal)
+					print('\t\t' + str(rules1))
 					rules1 = removeEmptyRules(rules1)
 					normalize(rules1)
+					dictionary[nonterminal1] = rules1
 				# remove the nonterminal from the dictionary
 				del dictionary[nonterminal]
 				break
@@ -115,6 +118,7 @@ def removeEmptyTransitions(dictionary):
 							rules1 = getAllPossibilitiesRemoving(rules1, nonterminal)
 							rules1 = removeEmptyRules(rules1)
 							normalize(rules1)
+							dictionary[nonterminal1] = rules1
 		# if the program has passed every nonterminal it has not found any
 		# empty transition
 		break
@@ -252,5 +256,5 @@ dictRules['B'] = [[1]]
 dictRules['A'] = [['B', 0.5], ['C', 0.5]]
 dictRules['C'] = [['B', 1]]
 print(dictRules)
-removeEmptyRules(dictRules)
+removeEmptyTransitions(dictRules)
 print(dictRules)
