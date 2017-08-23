@@ -37,7 +37,7 @@ def joinSamePossibilities(listOfRules):
 	for rule, probability in dictJoin.items():
 		transition = list(rule)
 		transition.append(probability)
-		returnRules.append([transition])
+		returnRules.append(transition)
 	return returnRules
 
 
@@ -88,19 +88,19 @@ def removeEmptyRules(rules):
 
 def removeEmptyTransitions(dictionary):
 	while(True):
+		doneDeleting = True
 		for nonterminal, rules in dictionary.items():
 			# if the nonterminal only generates an empty string
 			if len(rules) == 0 or (len(rules) == 1 and emptyRule(rules[0])):
 				# remove the nonterminal from every rule it appears
 				for nonterminal1, rules1 in dictionary.items():
-					print('\t' + nonterminal1)
 					rules1 = removeFromRules(rules1, nonterminal)
-					print('\t\t' + str(rules1))
 					rules1 = removeEmptyRules(rules1)
 					normalize(rules1)
 					dictionary[nonterminal1] = rules1
 				# remove the nonterminal from the dictionary
 				del dictionary[nonterminal]
+				doneDeleting = False
 				break
 			else:
 				generates = False
@@ -121,9 +121,8 @@ def removeEmptyTransitions(dictionary):
 							dictionary[nonterminal1] = rules1
 		# if the program has passed every nonterminal it has not found any
 		# empty transition
-		break
-
-
+		if doneDeleting:
+			break
 
 
 def getUnitarySons(dictionary, nonterminal):
@@ -254,7 +253,10 @@ def ckyParse(string, dictionary):
 dictRules = {}
 dictRules['B'] = [[1]]
 dictRules['A'] = [['B', 0.5], ['C', 0.5]]
-dictRules['C'] = [['B', 1]]
+dictRules['C'] = [['B', 0.3], ['E', 0.7]]
+dictRules['D'] = [['B', 'A', 'E', 0.3], ['E', 0.7]]
+dictRules['H'] = [[0.3], ['D', 0.7]]
+dictRules['I'] = [['D', 'H', 'E', 'H', 'F', 1]]
 print(dictRules)
 removeEmptyTransitions(dictRules)
 print(dictRules)
