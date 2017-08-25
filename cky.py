@@ -51,35 +51,6 @@ def removeEmptyTransitions(dictionary):
 			break
 
 
-def getUnitarySons(dictionary, nonterminal):
-	if nonterminal not in dictionary:
-		return [[nonterminal]]
-
-	listDelete = []
-	listAdd = []
-	rules = copy.deepcopy(dictionary[nonterminal])
-
-	for index in range(len(rules)):
-		if len(rules[index]) == 1:
-			listDelete.append(index)
-			listAdd += getUnitarySons(dictionary, rules[index][0])
-
-	deleted = 0
-	for index in range(len(listDelete)):
-		del rules[listDelete[index] - deleted]
-		deleted += 1
-
-	rules += listAdd
-	rules.sort()
-	return list(k for k,_ in itertools.groupby(rules))
-
-
-def removeUnitaryTransitions(dictionary):
-	for nonterminal, _ in dictionary.items():
-		dictionary[nonterminal] = getUnitarySons(dictionary, \
-			nonterminal)
-
-
 def createDummyNonTerminal(dictionary):
 	dictDummy = {}
 
@@ -122,7 +93,6 @@ def removeLongRules(dictionary):
 def convertToChomsky(dictionary):
 	removeEmptyTransitions(dictRules)
 	createDummyNonTerminal(dictRules)
-	removeUnitaryTransitions(dictRules)
 	removeLongRules(dictRules)
 
 
