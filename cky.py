@@ -32,7 +32,6 @@ def removeEmptyTransitions(dictionary):
 	while(True):
 		doneDeleting = True
 		for nonterminal, rules in dictionary.items():
-			print(nonterminal)
 			# if the nonterminal only generates an empty string
 			if len(rules) == 0 or (len(rules) == 1 and emptyRule(rules[0])):
 				# remove the nonterminal from every rule it appears
@@ -66,6 +65,8 @@ def createDummyNonTerminal(dictionary):
 
 	for _, rules in dictionary.items():
 		for rule in rules:
+			if len(rule) == 2:
+				continue
 			for index in range(len(rule) - 1):
 				if rule[index] not in dictionary:
 					rule[index] = dictDummy[rule[index]]
@@ -129,26 +130,18 @@ def ckyParse(string, dictionary):
 
 
 
-# dictRules = {}
-# dictRules['S'] = [['NP', 'VP'], ['Aux', 'NP', 'VP'], ['VP']]
-# dictRules['NP'] = [['Pronoun'], ['Proper-noun'], ['Det', 'Nominal']]
-# dictRules['Nominal'] = [['Noun'], ['Nominal', 'Noun'], ['Nominal', 'PP']]
-# dictRules['VP'] = [['Verb'], ['Verb', 'NP'], ['Verb', 'NP', 'PP'], ['Verb', 'PP'], ['VP', 'PP']]
-# dictRules['PP'] = [['Preposition', 'NP']]
-# dictRules['Det'] = [['that'], ['this'], ['a']]
-# dictRules['Noun'] = [['book'], ['flight'], ['meal'], ['money']]
-# dictRules['Verb'] = [['book'], ['include'], ['prefer']]
-# dictRules['Pronoun'] = [['I'], ['she'], ['me']]
-# dictRules['Proper-noun'] = [['Houston'], ['TWA']]
-# dictRules['Aux'] = [['does']]
-# dictRules['Preposition'] = [['from'], ['to'], ['on'], ['near'], ['through']]
-# convertToChomsky(dictRules)
-# ckyParse(['does', 'I', 'include', 'TWA', 'to', 'Houston'], dictRules)
 dictRules = {}
-dictRules['B'] = [[1]]
-dictRules['A'] = [['B', 0.5], ['C', 0.5]]
-dictRules['C'] = [['B', 0.3], ['E', 0.7]]
-dictRules['D'] = [['B', 'A', 'E', 0.3], ['E', 0.7]]
-dictRules['H'] = [['D', 0.7]]
-dictRules['I'] = [['D', 'H', 'E', 'H', 'F', 1]]
+dictRules['S'] = [['NP', 'VP', 0.5], ['Aux', 'NP', 'VP', 0.1], ['VP', 0.4]]
+dictRules['NP'] = [['Pronoun', 0.7], ['Proper-noun', 0.1], ['Det', 'Nominal', 0.2]]
+dictRules['Nominal'] = [['Noun', 0.2], ['Nominal', 'Noun', 0.4], ['Nominal', 'PP', 0.4]]
+dictRules['VP'] = [['Verb', 0.2], ['Verb', 'NP', 0.2], ['Verb', 'NP', 'PP', 0.2], ['Verb', 'PP', 0.2], ['VP', 'PP', 0.2]]
+dictRules['PP'] = [['Preposition', 'NP', 1.0]]
+dictRules['Det'] = [['that', 0.25], ['this', 0.25], ['a', 0.5]]
+dictRules['Noun'] = [['book', 0.3], ['flight', 0.3], ['meal', 0.2], ['money', 0.2]]
+dictRules['Verb'] = [['book', 0.05], ['include', 0.35], ['prefer', 0.6]]
+dictRules['Pronoun'] = [['I', 0.4], ['she', 0.2], ['me', 0.4]]
+dictRules['Proper-noun'] = [['Houston', 0.5], ['TWA', 0.5]]
+dictRules['Aux'] = [['does', 1.0]]
+dictRules['Preposition'] = [['from', 0.3], ['to', 0.5], ['on', 0.1], ['near', 0.05], ['through', 0.05]]
+convertToChomsky(dictRules)
 print(dictRules)
