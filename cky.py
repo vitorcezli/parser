@@ -5,64 +5,6 @@ import numbers
 import copy
 
 
-def removeDuplicates(listVariable):
-	listVariable.sort()
-	return list(k for k,_ in itertools.groupby(listVariable))	
-
-
-def getPossibilitiesWithout(rule, nonterminal):
-	possibilities = []
-
-	for index in range(len(rule)):
-		if rule[index] == nonterminal:
-			listCopy = rule[:]
-			del listCopy[index]
-			if len(listCopy) >= 1:
-				possibilities.append(listCopy)
-				possibilities += getPossibilitiesWithout(listCopy, nonterminal)
-	return removeDuplicates(possibilities)
-
-
-def joinSamePossibilities(listOfRules):
-	dictJoin = {}
-	for rule in listOfRules:
-		if tuple(rule[ : len(rule) - 1]) in dictJoin:
-			dictJoin[tuple(rule[ : len(rule) - 1])] += \
-				rule[len(rule) - 1]
-		else:
-			dictJoin[tuple(rule[ : len(rule) - 1])] = \
-				rule[len(rule) - 1]
-
-	returnRules = []
-	for rule, probability in dictJoin.items():
-		transition = list(rule)
-		transition.append(probability)
-		returnRules.append(transition)
-	return returnRules
-
-
-def getAllPossibilitiesRemoving(listOfRules, nonterminal):
-	possibilities = []
-
-	for rule in listOfRules:
-		sumProbability = rule[len(rule) - 1]
-		newPossibilities = []
-		newPossibilities.append(rule[ : len(rule) - 1])
-		possibilitiesWithout = \
-			getPossibilitiesWithout(rule[ : len(rule) - 1], nonterminal)
-		if possibilitiesWithout != []:
-			newPossibilities += possibilitiesWithout
-		newPossibilities = removeDuplicates(newPossibilities)
-
-		# normalize the probability
-		for possibility in newPossibilities:
-			possibility.append(sumProbability / len(newPossibilities))
-		possibilities += newPossibilities
-
-	# join same possibilities
-	return joinSamePossibilities(possibilities)
-
-
 def normalize(rules):
 	sumProbability = 0
 	for rule in rules:
@@ -103,25 +45,6 @@ def removeEmptyTransitions(dictionary):
 				del dictionary[nonterminal]
 				doneDeleting = False
 				break
-			else:
-				generates = False
-				for rule in rules:
-					print('\t' + str(rule))
-					if emptyRule(rule):
-						generates = True
-				# if the nonterminal generates an empty string in one of its rules
-				if generates:
-					# remove the empty generation rule
-					rules = removeEmptyRules(rules)
-					normalize(rules)
-					# use getPossibilitiesRemoving in every rule it appears
-					for nonterminal1, rules1 in dictionary.items():
-						if nonterminal1 != nonterminal:
-							print('\t\t' + nonterminal1)
-							rules1 = getAllPossibilitiesRemoving(rules1, nonterminal)
-							rules1 = removeEmptyRules(rules1)
-							normalize(rules1)
-							dictionary[nonterminal1] = rules1
 		# if the program has passed every nonterminal it has not found any
 		# empty transition
 		if doneDeleting:
