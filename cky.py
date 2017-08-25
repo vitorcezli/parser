@@ -79,15 +79,15 @@ def removeLongRules(dictionary):
 	number = len(dictionary)
 	for nonterminal, rules in dictionary.items():
 		for rule in rules:
-			while len(rule) > 2:
+			while len(rule) > 3:
 				key = "RLR%d" % (number)
 				number += 1
-				listAdd.append([key, rule[len(rule) - 2], rule[len(rule) - 1]])
-				rule[len(rule) - 2] = key
-				del rule[len(rule) - 1]
+				listAdd.append([key, rule[len(rule) - 3], rule[len(rule) - 2]])
+				rule[len(rule) - 3] = key
+				del rule[len(rule) - 2]
 
 	for rule in listAdd:
-		dictionary[rule[0]] = [[rule[1], rule[2]]]
+		dictionary[rule[0]] = [[rule[1], rule[2], 1.0]]
 
 
 def convertToChomsky(dictionary):
@@ -151,8 +151,4 @@ dictRules['C'] = [['B', 0.3], ['E', 0.7]]
 dictRules['D'] = [['B', 'A', 'E', 0.3], ['E', 0.7]]
 dictRules['H'] = [['D', 0.7]]
 dictRules['I'] = [['D', 'H', 'E', 'H', 'F', 1]]
-print(dictRules)
-removeEmptyTransitions(dictRules)
-print(dictRules)
-createDummyNonTerminal(dictRules)
 print(dictRules)
