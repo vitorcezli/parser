@@ -107,7 +107,7 @@ def getFatherNonterminal(rule, dictionary):
 
 
 def ckyParse(string, dictionary):
-	table = [[[] for x in range(len(string) + 1)] \
+	table = [[0 for x in range(len(string) + 1)] \
 		for y in range(len(string))]
 
 	for j in range(1, len(string) + 1):
