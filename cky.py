@@ -95,14 +95,12 @@ def createDummyNonTerminal(dictionary):
 
 	for _, rules in dictionary.items():
 		for rule in rules:
-			if len(rule) == 2:
-				continue
 			for index in range(len(rule) - 1):
 				if rule[index] not in dictionary:
 					rule[index] = dictDummy[rule[index]]
 
-	for dummy, nonterminal in dictDummy.items():
-		dictionary[nonterminal] = dummy
+	for nonterminal, dummy in dictDummy.items():
+		dictionary[dummy] = [[nonterminal, 1.0]]
 
 
 def removeLongRules(dictionary):
