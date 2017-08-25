@@ -85,19 +85,19 @@ def createDummyNonTerminal(dictionary):
 
 	for _, rules in dictionary.items():
 		for rule in rules:
-			if len(rule) == 1:
+			if len(rule) == 2:
 				continue
-			for stringGeneration in rule:
-				if stringGeneration not in dictionary:
-					if stringGeneration not in dictDummy:
-						dictDummy[stringGeneration] = \
+			for index in range(len(rule) - 1):
+				if rule[index] not in dictionary:
+					if rule[index] not in dictDummy:
+						dictDummy[rule[index]] = \
 							"DUMMY%d" % (len(dictDummy))
 
 	for _, rules in dictionary.items():
 		for rule in rules:
-			if len(rule) == 1:
+			if len(rule) == 2:
 				continue
-			for index in range(len(rule)):
+			for index in range(len(rule) - 1):
 				if rule[index] not in dictionary:
 					rule[index] = dictDummy[rule[index]]
 
@@ -185,4 +185,6 @@ dictRules['H'] = [['D', 0.7]]
 dictRules['I'] = [['D', 'H', 'E', 'H', 'F', 1]]
 print(dictRules)
 removeEmptyTransitions(dictRules)
+print(dictRules)
+createDummyNonTerminal(dictRules)
 print(dictRules)
