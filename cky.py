@@ -97,30 +97,35 @@ def convertToChomsky(dictionary):
 	removeLongRules(dictRules)
 
 
-def getFatherNonterminal(rule, dictionary):
+def getSymbolsFathers(rule, dictionary):
 	fathers = []
 	for nonterminal, rules in dictionary.items():
 		for ruleList in rules:
-			if rule == ruleList:
-				fathers.append(nonterminal)
+			if rule == ruleList[0 : len(ruleList) - 1]:
+				fathers.append([nonterminal] + [ruleList[len(ruleList) - 1]])
 	return fathers
 
 
 def ckyParse(string, dictionary):
-	table = [[0 for x in range(len(string) + 1)] \
+	table = [[{} for x in range(len(string) + 1)] \
 		for y in range(len(string))]
 
 	for j in range(1, len(string) + 1):
-		table[j - 1][j] = getFatherNonterminal([string[j - 1]], dictionary)
+		# part of speech transitions
+		fathers = getSymbolsFathers([string[j - 1]], dictionary)
+		for father in fathers:
+			table[j - 1][j][father[0]] = father[1]
+
 		for i in range(j - 2, -1, -1):
 			for k in range(i + 1, j):
 				listPosition = []
-				for position1 in table[i][k]:
-					for position2 in table[k][j]:
-						listPosition.append([position1, position2])
+				for symbol1, _ in table[i][k].items():
+					for symbol2, _ in table[k][j].items():
+						listPosition.append([symbol1, symbol2])
 				for rule in listPosition:
+					fathers = getSymbolsFathers(rule, dictionary)
 					table[i][j] += \
-						getFatherNonterminal(rule, dictionary)
+						getSymbolsFathers(rule, dictionary)
 			table[i][j] = list(set(table[i][j]))
 
 	for i in range(len(table)):
@@ -144,4 +149,4 @@ dictRules['Proper-noun'] = [['Houston', 0.5], ['TWA', 0.5]]
 dictRules['Aux'] = [['does', 1.0]]
 dictRules['Preposition'] = [['from', 0.3], ['to', 0.5], ['on', 0.1], ['near', 0.05], ['through', 0.05]]
 convertToChomsky(dictRules)
-print(dictRules)
+ckyParse(['money'], dictRules)
