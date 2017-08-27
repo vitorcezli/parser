@@ -109,6 +109,8 @@ def getSymbolsFathers(rule, dictionary):
 def ckyParse(string, dictionary):
 	table = [[{} for x in range(len(string) + 1)] \
 		for y in range(len(string))]
+	back = [[{} for x in range(len(string) + 1)] \
+		for y in range(len(string))]
 
 	for j in range(1, len(string) + 1):
 		# part of speech transitions
@@ -118,19 +120,30 @@ def ckyParse(string, dictionary):
 
 		for i in range(j - 2, -1, -1):
 			for k in range(i + 1, j):
+				# after this part there is the possible two nonterminals
+				# that make part of the right side of a rule
 				listPosition = []
 				for symbol1, _ in table[i][k].items():
 					for symbol2, _ in table[k][j].items():
 						listPosition.append([symbol1, symbol2])
+				print(str(i) + str(j) + str(listPosition))
 				for rule in listPosition:
 					fathers = getSymbolsFathers(rule, dictionary)
-					table[i][j] += \
-						getSymbolsFathers(rule, dictionary)
-			table[i][j] = list(set(table[i][j]))
+					print(fathers)
+					for father in fathers:
+						if father in table[i][j]:
+							if table[i][j][father] < father[1] * table[i][k][rule[0]] * table[k][j][rule[1]]:
+								table[i][j][father] = father[1] * table[i][k][rule[0]] * table[k][j][rule[1]]
+								back[i][j][father] = [k, rule[0], rule[1]]
+						else:
+							table[i][j][father] = father[1] * table[i][k][rule[0]] * table[k][j][rule[1]]
+							back[i][j][father] = [k, rule[0], rule[1]]
+
+	print(table)
 
 	for i in range(len(table)):
 		for j in range(len(table[i])):
-			print(table[i][j], end = "%5s" % ('\t'))
+			print(len(table[i][j]), end = "%5s" % ('\t'))
 		print('')
 
 
@@ -149,4 +162,4 @@ dictRules['Proper-noun'] = [['Houston', 0.5], ['TWA', 0.5]]
 dictRules['Aux'] = [['does', 1.0]]
 dictRules['Preposition'] = [['from', 0.3], ['to', 0.5], ['on', 0.1], ['near', 0.05], ['through', 0.05]]
 convertToChomsky(dictRules)
-ckyParse(['money'], dictRules)
+ckyParse(['I', 'prefer', 'me'], dictRules)
