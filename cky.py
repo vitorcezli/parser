@@ -106,6 +106,26 @@ def getSymbolsFathers(rule, dictionary):
 	return fathers
 
 
+def addFathersOfFathers(table, i, j, dictionary):
+	while True:
+		newFathers = []
+		shouldBreak = True
+		for symbol, prob in table[i][j].items():
+			fathers = getSymbolsFathers([symbol], dictionary)
+			if fathers != []:
+				for father in fathers:
+					father[1] = father[1] * prob
+			newFathers += fathers
+			for father in fathers:
+				if father[0] not in table[i][j]:
+					shouldBreak = False
+		if shouldBreak:
+			return
+		for father in newFathers:
+			if father[0] not in table[i][j]:
+				table[i][j][father[0]] = father[1]
+
+
 def ckyParse(string, dictionary):
 	table = [[{} for x in range(len(string) + 1)] \
 		for y in range(len(string))]
@@ -117,6 +137,7 @@ def ckyParse(string, dictionary):
 		fathers = getSymbolsFathers([string[j - 1]], dictionary)
 		for father in fathers:
 			table[j - 1][j][father[0]] = father[1]
+			addFathersOfFathers(table, j - 1, j, dictionary)
 
 		for i in range(j - 2, -1, -1):
 			for k in range(i + 1, j):
@@ -126,24 +147,20 @@ def ckyParse(string, dictionary):
 				for symbol1, _ in table[i][k].items():
 					for symbol2, _ in table[k][j].items():
 						listPosition.append([symbol1, symbol2])
-				print(str(i) + str(j) + str(listPosition))
 				for rule in listPosition:
 					fathers = getSymbolsFathers(rule, dictionary)
-					print(fathers)
 					for father in fathers:
-						if father in table[i][j]:
-							if table[i][j][father] < father[1] * table[i][k][rule[0]] * table[k][j][rule[1]]:
-								table[i][j][father] = father[1] * table[i][k][rule[0]] * table[k][j][rule[1]]
-								back[i][j][father] = [k, rule[0], rule[1]]
+						if father[0] in table[i][j]:
+							if table[i][j][father[0]] < father[1] * table[i][k][rule[0]] * table[k][j][rule[1]]:
+								table[i][j][father[0]] = father[1] * table[i][k][rule[0]] * table[k][j][rule[1]]
+								back[i][j][father[0]] = [k, rule[0], rule[1]]
 						else:
-							table[i][j][father] = father[1] * table[i][k][rule[0]] * table[k][j][rule[1]]
-							back[i][j][father] = [k, rule[0], rule[1]]
-
-	print(table)
+							table[i][j][father[0]] = father[1] * table[i][k][rule[0]] * table[k][j][rule[1]]
+							back[i][j][father[0]] = [k, rule[0], rule[1]]
 
 	for i in range(len(table)):
 		for j in range(len(table[i])):
-			print(len(table[i][j]), end = "%5s" % ('\t'))
+			print(table[i][j], end = " " )
 		print('')
 
 
